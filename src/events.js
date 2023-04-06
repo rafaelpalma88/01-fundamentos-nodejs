@@ -2,7 +2,6 @@ export const events = [
   {
     id: 'a1',
     active: true,
-    image: image01,
     title: 'Esfiha Imigrantes',
     address: 'Av. Dr. Ricardo Jafet, 3332 - Vila Gumercindo, São Paulo - SP, 04260-020',
     description: [
@@ -15,7 +14,6 @@ export const events = [
   {
     id: 'b2',
     active: false,
-    image: image01,
     title: 'Hopi Hari',
     address: 'Av. Dr. Ricardo Jafet, 3332 - Vila Gumercindo, São Paulo - SP, 04260-020',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eget sapien sed lectus imperdiet vehicula quis vitae risus. Donec at dui pretium, vehicula quam nec, tristique leo. Nam egestas tellus orci, non commodo urna imperdiet nec. Sed at libero massa',
