@@ -1,10 +1,7 @@
 import http from 'node:http'
 import { json } from './middlewares/json.js'
-import { events } from './events.js'
-import { Database } from './database.js';
-import { randomUUID } from 'node:crypto'
-
-const database = new Database();
+import { routes } from './routes.js'
+import { extractQueryParams } from './utils/extract-query-params.js'
 
 const server = http.createServer(async (req,res) => {
 
@@ -12,34 +9,19 @@ const server = http.createServer(async (req,res) => {
   
   await json(req, res)
 
-  if (method === 'GET' && url === '/events') {
-    return res.end(JSON.stringify(events))
-  }
+  const route = routes.find(route => {
+    return route.method === method && route.path.test(url)
+  })
 
-  if (method === 'GET' && url === '/users') {
+  if (route) {
+    const routeParams = req.url.match(route.path)
 
-    const users = database.select('users')
+    const { query, ...params } = routeParams.groups
 
-    console.log('users xxx', users)
+    req.params = params
+    req.query = query ? extractQueryParams(routeParams.groups.query) : {}
 
-    return res.end(JSON.stringify(users))
-  }
-
-  if (method === 'POST' && url === '/users') {
-
-    const { name, email } = req.body;
-    console.log('name', name);
-    console.log('email', email);
-
-    const user = {
-      id: randomUUID(),
-      name,
-      email
-    }
-
-    database.insert('users', user)
-
-    return res.writeHead(201).end('criação de usuários')
+    return route.handler(req, res)
   }
 
   return res.writeHead(404).end()
